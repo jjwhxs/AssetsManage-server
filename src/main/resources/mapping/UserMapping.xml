@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hxs.assetsmanage.dao.UserMapping">
+    <resultMap id="BaseResultMap" type="com.hxs.assetsmanage.model.User">
+        <id column="uid" property="uid" javaType="INTEGER"></id>
+        <result column="account" property="account" jdbcType="VARCHAR"></result>
+        <result column="password" property="password" jdbcType="VARCHAR"></result>
+        <result column="mobilephonenum" property="mobilephonenum" jdbcType="VARCHAR"></result>
+        <result column="email" property="email" jdbcType="VARCHAR"></result>
+        <result column="status" property="status" jdbcType="INTEGER"></result>
+        <result column="username" property="username" jdbcType="VARCHAR"></result>
+        <result column="headimg" property="headimg" jdbcType="VARCHAR"></result>
+        <result column="sex" property="sex" jdbcType="VARCHAR"></result>
+        <result column="role" property="role" jdbcType="VARCHAR"></result>
+    </resultMap>
+    <sql id="Base_Column_List">
+          uid,account,password,mobilephonenum,email,status,username,headimg
+    </sql>
+    <!--获取所有用户信息-->
+    <select id="getUserlist" resultMap="BaseResultMap">
+        select uid,username,rname from user join role on user.rid = role.rid
+    </select>
+    <!--进行登录操作-->
+    <select id="getUser" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select <include refid="Base_Column_List"/> from user where account=#{account,jdbcType=VARCHAR} and password=#{password,jdbcType=VARCHAR}
+    </select>
+    <!--根据ID删除一条数据-->
+    <delete id="delUser" parameterType="java.lang.Integer">
+        delete from user where uid = #{uid,jdbcType=INTEGER}
+    </delete>
+    <!--根据ID查询一条数据-->
+    <select id="getSingleUser" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select <include refid="Base_Column_List"/> from user where uid = #{uid,jdbcType=INTEGER}
+    </select>
+    <!--根据Rid查询一条数据-->
+    <select id="getRoleOr" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select * from user where rid = #{rid,jdbcType=INTEGER}
+    </select>
+    <!---进行注册，往数据库添加数据-->
+    <insert id="goRegister" parameterType="com.hxs.assetsmanage.model.User">
+        insert into user (account,password,mobilephonenum,email) values (#{account,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},#{mobilephonenum,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR})
+    </insert>
+    <!--添加一条数据信息-->
+    <insert id="addUser" parameterType="com.hxs.assetsmanage.model.User">
+        insert into user (username,rid) values (#{username,jdbcType=VARCHAR},#{rid,jdbcType=INTEGER})
+    </insert>
+</mapper>

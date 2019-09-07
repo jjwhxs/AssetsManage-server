@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hxs.assetsmanage.dao.GivemoneyMapping">
+    <resultMap id="BaseResultMap" type="com.hxs.assetsmanage.model.Givemoney">
+        <id column="gid" property="gid" jdbcType="INTEGER"></id>
+        <result column="gmoney" property="gmoney" jdbcType="DECIMAL"></result>
+        <result column="preday" property="preday" jdbcType="INTEGER"></result>
+        <result column="crimoney" property="crimoney" jdbcType="DECIMAL"></result>
+        <result column="gtime" property="gtime" jdbcType="TIMESTAMP"></result>
+        <result column="settime" property="settime" jdbcType="TIMESTAMP"></result>
+        <result column="uptime" property="uptime" jdbcType="TIMESTAMP"></result>
+        <result column="setpeople" property="setpeople" jdbcType="VARCHAR"></result>
+        <result column="uppeople" property="uppeople" jdbcType="VARCHAR"></result>
+        <result column="gstatus" property="gstatus" jdbcType="INTEGER"></result>
+        <result column="cname" property="cname" jdbcType="VARCHAR"></result>
+        <result column="bmoney" property="bmoney" jdbcType="DECIMAL"></result>
+        <result column="bstime" property="bstime" jdbcType="TIMESTAMP"></result>
+        <result column="betime" property="betime" jdbcType="TIMESTAMP"></result>
+        <result column="status" property="status" jdbcType="INTEGER"></result>
+        <result column="bprofit" property="bprofit" jdbcType="DECIMAL"></result>
+    </resultMap>
+    <sql id="Base_Column_List">
+        gid,gmoney,preday,crimoney,gtime,settime,uptime,setpeople,uppeople,gstatus
+    </sql>
+    <!--按主键查找对应的放款信息-->
+    <select id="getOne" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from givemoney where gid = #{gid,jdbcType=INTEGER}
+    </select>
+    <!--获取所有放款信息-->
+    <select id="getGivemoney" resultMap="BaseResultMap">
+        select * from givemoney join borrowmoney on givemoney.bid = borrowmoney.bid join company on givemoney.cid = company.cid
+    </select>
+    <!--添加一条放款信息-->
+    <insert id="addGivemoney" parameterType="com.hxs.assetsmanage.model.Givemoney">
+        insert into givemoney (cid,bid,preday,crimoney,gstatus) values (#{cid,jdbcType=INTEGER},#{bid,jdbcType=INTEGER},#{preday,jdbcType=INTEGER},#{crimoney,jdbcType=DECIMAL},#{gstatus,jdbcType=INTEGER})
+    </insert>
+    <!--根据主键更新一条放款信息-->
+    <!--根据主键删除一条放款信息-->
+</mapper>

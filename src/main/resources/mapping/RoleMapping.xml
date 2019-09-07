@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hxs.assetsmanage.dao.RoleMapping">
+    <resultMap id="BaseResultMap" type="com.hxs.assetsmanage.model.Role">
+        <id column="rid" property="rid" jdbcType="INTEGER"></id>
+        <result column="rname" property="rname" jdbcType="VARCHAR"></result>
+        <result column="beginor" property="beginor" jdbcType="VARCHAR"></result>
+    </resultMap>
+    <sql id="Base_Column_List">
+        rid,rname,beginor
+    </sql>
+    <!--通过主键查找单条数据信息-->
+    <select id="getOne" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select <include refid="Base_Column_List"/> from role where rid = #{rid,jdbcType=INTEGER}
+    </select>
+    <!--获取全部的角色信息-->
+    <select id="getRole" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from role
+    </select>
+    <!--获取下拉框中的内容信息-->
+    <select id="getRname" resultMap="BaseResultMap">
+        select rid,rname from role
+    </select>
+    <!--按主键删除角色中的某条信息-->
+    <delete id="delRole" parameterType="java.lang.Integer">
+        delete from role where rid = #{rid,jdbcType=INTEGER}
+    </delete>
+    <!--添加到角色表中某条信息-->
+    <insert id="addRole" parameterType="com.hxs.assetsmanage.model.Role">
+        insert into role (rid,rname,beginor) values (#{rid,jdbcType=INTEGER},#{rname,jdbcType=VARCHAR},#{beginor,jdbcType=VARCHAR})
+    </insert>
+    <!--按主键更新角色表中的某条信息-->
+    <update id="uptRole" parameterType="com.hxs.assetsmanage.model.Role">
+        update role set rname = #{rname,jdbcType=VARCHAR},beginor = #{beginor,jdbcType=VARCHAR} where rid = #{rid,jdbcType=INTEGER}
+    </update>
+</mapper>

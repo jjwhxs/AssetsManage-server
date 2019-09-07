@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hxs.assetsmanage.dao.AssetsdebtMapping">
+    <resultMap id="BaseResultMap" type="com.hxs.assetsmanage.model.Assetsdebt">
+        <id column="adid" property="adid" jdbcType="INTEGER"></id>
+        <result column="adcmoney" property="adcmoney" jdbcType="DECIMAL"></result>
+        <result column="adsmoney" property="adsmoney" jdbcType="DECIMAL"></result>
+        <result column="adfmoney" property="adfmoney" jdbcType="DECIMAL"></result>
+        <result column="admmoney" property="admmoney" jdbcType="DECIMAL"></result>
+        <result column="adtotal" property="adtotal" jdbcType="DECIMAL"></result>
+        <result column="total" property="total" jdbcType="DECIMAL"></result>
+        <result column="settime" property="settime" jdbcType="TIMESTAMP"></result>
+        <result column="uptime" property="uptime" jdbcType="TIMESTAMP"></result>
+        <result column="setpeople" property="setpeople" jdbcType="VARCHAR"></result>
+        <result column="uppeople" property="uppeople" jdbcType="VARCHAR"></result>
+        <result column="cid" property="cid" jdbcType="INTEGER"></result>
+        <result column="cname" property="cname" jdbcType="VARCHAR"></result>
+    </resultMap>
+    <sql id="Base_Column_List">
+        adid,adcmoney,adsmoney,adfmoney,admmoney,adtotal,total,settime,uptime,setpeople,uppeople,cid
+    </sql>
+    <!--按主键查找对应的资产负债信息-->
+    <select id="getOne" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from assetsdebt where adid = #{adid,jdbcType=INTEGER}
+    </select>
+    <!--获取所有资产负债信息-->
+    <select id="getAssetsdebt" resultMap="BaseResultMap">
+        select * from assetsdebt join company on assetsdebt.cid = company.cid
+    </select>
+    <!--添加一条资产负债信息-->
+    <insert id="addAssetsdebt" parameterType="com.hxs.assetsmanage.model.Assetsdebt">
+        insert into assetsdebt (company,adcmoney,adsmoney,adfmoney,admmoney,adtotal,total) values (#{company,jdbcType=VARCHAR},#{adcmoney,jdbcType=DECIMAL},#{adsmoney,jdbcType=DECIMAL},#{adfmoney,jdbcType=DECIMAL},#{admmoney,jdbcType=DECIMAL},#{adtotal,jdbcType=DECIMAL},#{total,jdbcType=DECIMAL})
+    </insert>
+    <!--根据主键更新一条资产负债信息-->
+    <update id="uptAssetsdebt" parameterType="com.hxs.assetsmanage.model.Assetsdebt">
+         update assetsdebt set company = #{company,jdbcType=VARCHAR},adcmoney = #{adcmoney,jdbcType=DECIMAL},adsmoney = #{adsmoney,jdbcType=DECIMAL},adfmoney = #{adfmoney,jdbcType=DECIMAL},admmoney = #{admmoney,jdbcType=DECIMAL},adtotal = #{adtotal,jdbcType=DECIMAL},total = #{total,jdbcType=DECIMAL} where adid = #{adid,jdbcType=INTEGER}
+    </update>
+    <!--根据主键删除一条资产负债信息-->
+    <delete id="delAssetsdebt" parameterType="java.lang.Integer">
+        delete from assetsdebt where adid = #{adid,jdbcType=INTEGER}
+    </delete>
+    <!--更新一条数据的金额-->
+    <update id="uptMoney" parameterType="com.hxs.assetsmanage.model.Assetsdebt">
+        update assetsdebt set total = #{total,jdbcType=DECIMAL} where adid = #{adid,jdbcType=INTEGER}
+    </update>
+</mapper>
