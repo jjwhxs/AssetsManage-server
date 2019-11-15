@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hxs.assetsmanage.dao.CompanyMapping">
+    <resultMap id="BaseResultMap" type="com.hxs.assetsmanage.model.Company">
+        <id column="cid" property="cid" jdbcType="INTEGER"></id>
+        <result column="cname" property="cname" jdbcType="VARCHAR"></result>
+        <result column="cuname" property="cuname" jdbcType="VARCHAR"></result>
+        <result column="caddress" property="caddress" jdbcType="VARCHAR"></result>
+        <result column="org" property="org" jdbcType="VARCHAR"></result>
+        <result column="rigmoney" property="rigmoney" jdbcType="DECIMAL"></result>
+        <result column="master" property="master" jdbcType="VARCHAR"></result>
+        <result column="settime" property="settime" jdbcType="TIMESTAMP"></result>
+        <result column="uptime" property="uptime" jdbcType="TIMESTAMP"></result>
+        <result column="setpeople" property="setpeople" jdbcType="VARCHAR"></result>
+        <result column="uppeople" property="uppeople" jdbcType="VARCHAR"></result>
+    </resultMap>
+    <sql id="Base_Column_List">
+        cid,cname,cuname,caddress,org,rigmoney,master,settime,uptime,setpeople,uppeople
+    </sql>
+    <!--按主键查找对应的公司信息-->
+    <select id="getOne" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from company where cid = #{cid,jdbcType=INTEGER}
+    </select>
+    <!--获取所有公司信息-->
+    <select id="getCompany" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from company
+    </select>
+    <!--添加一条公司信息-->
+    <insert id="addCompany" parameterType="com.hxs.assetsmanage.model.Company">
+        insert into company (cname,cuname,settime) values (#{cname,jdbcType=VARCHAR},#{cuname,jdbcType=VARCHAR},#{settime,jdbcType=TIMESTAMP})
+    </insert>
+    <!--根据主键更新一条公司信息-->
+    <update id="uptCompany" parameterType="com.hxs.assetsmanage.model.Company">
+         update company set cname = #{cname,jdbcType=VARCHAR},cuname = #{cuname,jdbcType=VARCHAR},settime = #{settime,jdbcType=TIMESTAMP} where cid = #{cid,jdbcType=INTEGER}
+    </update>
+    <!--根据主键删除一条公司信息-->
+    <delete id="delCompany" parameterType="java.lang.Integer">
+        delete from company where cid = #{cid,jdbcType=INTEGER}
+    </delete>
+    <!--获取公司的名称-->
+    <select id="getComName" resultMap="BaseResultMap">
+        select cid,cname from company
+    </select>
+</mapper>

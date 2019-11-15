@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hxs.assetsmanage.dao.BorrowmoneyMapping">
+    <!--这里的cid字段有待使用-->
+    <resultMap id="BaseResultMap" type="com.hxs.assetsmanage.model.Borrowmoney">
+        <id column="bid" property="bid" jdbcType="INTEGER"></id>
+        <result column="bmoney" property="bmoney" jdbcType="DECIMAL"></result>
+        <result column="bstime" property="bstime" jdbcType="TIMESTAMP"></result>
+        <result column="betime" property="betime" jdbcType="TIMESTAMP"></result>
+        <result column="status" property="status" jdbcType="INTEGER"></result>
+        <result column="bprofit" property="bprofit" jdbcType="DECIMAL"></result>
+        <result column="settime" property="settime" jdbcType="TIMESTAMP"></result>
+        <result column="uptime" property="uptime" jdbcType="TIMESTAMP"></result>
+        <result column="setpeople" property="setpeople" jdbcType="VARCHAR"></result>
+        <result column="uppeople" property="uppeople" jdbcType="VARCHAR"></result>
+        <result column="gcompany" property="gcompany" jdbcType="VARCHAR"></result>
+        <result column="cname" property="cname" jdbcType="VARCHAR"></result>
+    </resultMap>
+    <!--由于关联表的情况，所以这里的sql标签不一定能用的到-->
+    <sql id="Base_Column_List">
+        bid,bmoney,bstime,betime,status,bprofit,settime,uptime,setpeople,uppeople,gcompany
+    </sql>
+    <!--按主键查找对应的资金借款信息-->
+    <select id="getOne" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from borrowmoney where bid = #{bid,jdbcType=INTEGER}
+    </select>
+    <!--获取所有资金借款信息-->
+    <select id="getBorrowmoney" resultMap="BaseResultMap">
+        select * from borrowmoney join company on borrowmoney.cid = company.cid
+    </select>
+    <!--添加一条资金借款信息-->
+    <insert id="addBorrowmoney" parameterType="com.hxs.assetsmanage.model.Borrowmoney">
+        insert into borrowmoney (cid,bmoney,bstime,betime,bprofit,status) values (#{cid,jdbcType=INTEGER},#{bmoney,jdbcType=DECIMAL},#{bstime,jdbcType=TIMESTAMP},#{betime,jdbcType=TIMESTAMP},#{bprofit,jdbcType=DECIMAL},#{status,jdbcType=INTEGER})
+    </insert>
+    <!--根据主键更新一条资金借款信息-->
+    <update id="uptBorrowmoney" parameterType="com.hxs.assetsmanage.model.Borrowmoney">
+         update borrowmoney set bmoney = #{bmoney,jdbcType=DECIMAL},bstime = #{bstime,jdbcType=TIMESTAMP},betime = #{betime,jdbcType=TIMESTAMP},bprofit = #{bprofit,jdbcType=DECIMAL} where bid = #{bid,jdbcType=INTEGER}
+    </update>
+    <!--根据主键删除一条资金借款信息-->
+    <delete id="delBorrowmoney" parameterType="java.lang.Integer">
+        delete from borrowmoney where bid = #{bid,jdbcType=INTEGER}
+    </delete>
+    <!--对借款的状态进行更改-->
+    <update id="uptStatus" parameterType="com.hxs.assetsmanage.model.Borrowmoney">
+        update borrowmoney set status = #{status,jdbcType=INTEGER} where bid = #{bid,jdbcType=INTEGER}
+    </update>
+</mapper>
